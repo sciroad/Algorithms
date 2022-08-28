@@ -7,4 +7,3 @@ def larrysArray(A):
     if counter%2==0:
         return "YES"
     return "NO"
-
