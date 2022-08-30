@@ -19,7 +19,6 @@ def almostSorted(arr):
                 return
             E = True
             break
-    print(F,E)
     if E and F:
         if f+2 < e and arr[f+1] > arr[f+2]:
             arr[f:e+1] = arr[f:e+1][::-1]
