@@ -1,4 +1,4 @@
-package main
+package hard
 
 import "fmt"
 
@@ -15,20 +15,16 @@ func matrixRotation(matrix [][]int32, r int32) {
 	for i := int32(0); i < l; i++ {
 		m := row - 2*i - 2
 		n := col - 2*i - 2
-		temp := (2 * (m + n))
-		times := r
-		if temp > 0 {
-			times %= temp
-		}
-
+		times := r % (2 * (m + n))
 		rotate(matrix, i, row-i-1, i, col-i-1, times)
 	}
-	printMatrix(matrix)
+	fmt.Println(matrix)
 
 }
 
 func rotate(matrix [][]int32, top, bottom, left, right, times int32) [][]int32 {
-	if (top == bottom && bottom == right && right == left) || times == 0 {
+	fmt.Println(top, bottom, left, right, times)
+	if (top == bottom && right == left) || times == 0 {
 		return matrix
 	}
 	for i := int32(0); i < times; i++ {
@@ -48,26 +44,11 @@ func rotate(matrix [][]int32, top, bottom, left, right, times int32) [][]int32 {
 			matrix[bottom][k] = prev
 			prev = temp
 		}
-		for k := bottom - 1; k >= top; k-- {
-			temp := matrix[k][right]
-			matrix[k][right] = prev
+		for k := bottom; k >= top; k-- {
+			temp := matrix[top][k]
+			matrix[top][k] = prev
 			prev = temp
 		}
 	}
 	return matrix
-}
-func printMatrix(matrix [][]int32) {
-	for _, mx := range matrix {
-		for _, num := range mx {
-			fmt.Printf("%d ", num)
-		}
-		fmt.Println()
-	}
-}
-
-func main() {
-	matrix := [][]int32{
-		{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16},
-	}
-	matrixRotation(matrix, 2)
 }
