@@ -1,5 +1,6 @@
 from bisect import bisect_left, insort_left
 
+#Once you sort the list keep the list sorted and add new items to their sorted position.
 def activityNotifications(expenditure, d):
     
     listD = sorted(expenditure[:d])
