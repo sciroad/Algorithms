@@ -1,6 +1,3 @@
-from re import L
-
-
 def highestValuePalindrome(s, n, k):
     # Write your code here
     s=list(s)
