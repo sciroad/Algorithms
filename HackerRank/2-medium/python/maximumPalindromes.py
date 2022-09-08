@@ -1,63 +1,55 @@
 import math
-import os
-import random
-import re
-import sys
 from collections import Counter, defaultdict
-from math import factorial
-
+dist = defaultdict(lambda : Counter(""))
 fact = dict()
 powr = dict()
-dist = defaultdict(lambda : Counter(""))
-
 m = 10 ** 9 + 7
-
 def initialize(s):
     fact[0], powr[0], dist[0] = 1, 1, Counter(s[0])
     for j in range(1, len(s)):
         fact[j] = (j * fact[j - 1]) % m
         dist[j] = dist[j-1] + Counter(s[j])
 
-def power(x, n, m):
-    if n == 1:
-        return x % m
-    elif n % 2 == 0:
-        return power(x ** 2 % m, n // 2, m)
-    else:
-        return (x * power(x ** 2 % m, (n - 1) // 2, m)) % m
+initialize("aabb")
+print(dist)
+factorials={}
+l_dict=[]
+def initialize(s):
+    # This function is called once before all queries.  
+    d={}
+    factorials[0]=1
+    factorials[1]=1
+    d[s[0]]=1
+    for i in range(1,len(s)):
+        if s[i] not in d:
+            d[s[i]]=0
+        d[s[i]]+=1
+        l_dict.append(d.copy())
+        factorials[i+1]=(factorials[i]*(i+1))%1000000007
 
-
-def answerQuery(s, l, r):
-    # Return the answer for this query modulo 1000000007.
-    b = dist[r-1] - dist[l-2]
-    p, count, value = 0, 0, 1
-    for c in b.values():
-        if c >= 2:
-            count += c // 2
-            value = (value * fact[c // 2]) % m
-        if c % 2 == 1:
-            p += 1
-    return (max(1, p) * fact[count] * power(value, m - 2, m)) % m
-
-if __name__ == '__main__':
-    fptr = open(os.environ['OUTPUT_PATH'], 'w')
-
-    s = input()
-
-    initialize(s)
-    
-    print(dist)
-    q = int(input().strip())
-
-    for q_itr in range(q):
-        first_multiple_input = input().rstrip().split()
-
-        l = int(first_multiple_input[0])
-
-        r = int(first_multiple_input[1])
-
-        result = answerQuery(s,l, r)
-
-        fptr.write(str(result) + '\n')
-
-    fptr.close()
+def answerQuery(l, r):
+    def dif(d1,d2):
+        d3={}
+        for key in d2:
+            if key not in d1:
+                d3[key]=d2[key]
+            else:
+                d3[key]=d2[key]-d1[key]
+        return d3
+    count=l_dict[r-1]
+    if l>1:
+        count=dif(l_dict[l-2],l_dict[r-1])
+    ones=0
+    fac=1
+    result=0
+    for num in count.values():
+        ones+=num%2
+        numdiv2=num//2
+        result+=numdiv2
+        fac=(factorials[numdiv2]*fac)%1000000007
+    result=factorials[result]//fac
+    if ones>0:
+        result*=ones
+    return result%1000000007
+s="wldsfubcsxrryqpqyqqxrlffumtuwymbybnpemdiwyqz"
+print(answerQuery(13,34))
